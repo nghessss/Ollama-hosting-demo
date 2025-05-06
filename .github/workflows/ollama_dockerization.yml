@@ -32,10 +32,14 @@ jobs:
         with:
           workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: github-foodvqa@${{ env.PROJECT_ID }}.iam.gserviceaccount.com
-          
-      - name: Install Google Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1          
 
+      - name: Install Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1  
+               
+      - name: Set GCP Authenticated Identity
+        run: |
+          gcloud config set account github-foodvqa@${{ env.PROJECT_ID }}.iam.gserviceaccount.com
+          
       - name: Test Auth Identity
         run: |
           echo "🔐 Verifying authenticated identity..."

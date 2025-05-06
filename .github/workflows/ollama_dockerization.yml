@@ -33,6 +33,11 @@ jobs:
           workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: github-foodvqa@${{ env.PROJECT_ID }}.iam.gserviceaccount.com
 
+      - name: Test Auth Identity
+        run: |
+          echo "🔐 Verifying authenticated identity..."
+          gcloud config list account
+
       - name: Docker Auth for Artifact Registry
         uses: docker/login-action@v3
         with:

@@ -49,5 +49,5 @@ jobs:
           IMAGE_URI="${GAR_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/${IMAGE_NAME}:latest"
           echo "🚀 Building and pushing image: $IMAGE_URI"
 
-          docker build -f ollama/Dockerfile.ollama -t "$IMAGE_URI" ollama/
+          docker build -t "$IMAGE_URI" .
           docker push "$IMAGE_URI"

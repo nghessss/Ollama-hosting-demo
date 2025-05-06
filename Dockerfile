@@ -1,26 +1,25 @@
-# Use CUDA-enabled Ubuntu base image
 FROM nvidia/cuda:12.2.2-base-ubuntu22.04
 
-# Set non-interactive environment for installs
 ENV DEBIAN_FRONTEND=noninteractive
 ENV OLLAMA_HOST=0.0.0.0
+ENV PATH="/root/.ollama/bin:${PATH}" 
 
 # Install dependencies
 RUN apt-get update && \
-    apt-get install -y curl gnupg unzip git build-essential libssl-dev ca-certificates && \
+    apt-get install -y curl gnupg unzip git build-essential libssl-dev && \
     rm -rf /var/lib/apt/lists/*
 
-# Install Ollama (use bash for compatibility)
+# Install Ollama
 RUN curl -fsSL https://ollama.com/install.sh | bash
 
-# Add Ollama binary to PATH
-ENV PATH="/root/.ollama/bin:$PATH"
+# Verify installation
+RUN which ollama && ollama --version
 
-# Expose Ollama's API port
+# Pull the vision-capable model during build
+RUN ollama serve & sleep 5 && ollama pull llama3.2-vision:11b-instruct-fp16 && pkill ollama
+
+# Expose Ollama API port
 EXPOSE 11434
 
-# Pull the vision-capable model
-RUN /root/.ollama/bin/ollama pull llama3.2-vision:11b-instruct-fp16
-
-# Start Ollama as a background server
+# Default command
 CMD ["ollama", "serve"]

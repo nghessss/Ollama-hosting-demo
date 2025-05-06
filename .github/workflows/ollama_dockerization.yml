@@ -39,7 +39,7 @@ jobs:
       - name: Set GCP Authenticated Identity
         run: |
           gcloud config set account github-foodvqa@${{ env.PROJECT_ID }}.iam.gserviceaccount.com
-          
+
       - name: Test Auth Identity
         run: |
           echo "🔐 Verifying authenticated identity..."
@@ -54,6 +54,7 @@ jobs:
 
       - name: Test Push Alpine Image (Permission Check)
         run: |
+          gcloud auth configure-docker asia-southeast2-docker.pkg.dev
           TEST_IMAGE_URI="${GAR_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/test-push-alpine:temp"
           echo "🔍 Testing image push to: $TEST_IMAGE_URI"
           docker pull alpine
